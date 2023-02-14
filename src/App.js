@@ -1,6 +1,7 @@
 import React from "react";
 import { getRandomWord } from "./utils.js";
 import "./App.css";
+import Image from "./Components/image.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class App extends React.Component {
       numOfGuessesLeft: 10,
       // Insert form input state here
       input: "",
+      imageOpacity: 0.1,
     };
   }
 
@@ -56,6 +58,10 @@ class App extends React.Component {
         ? this.state.numOfGuessesLeft
         : this.state.numOfGuessesLeft - 1,
       // input will be reset as the previous input already saved in guessedLetters
+      imageOpacity: this.state.currWord.includes(inputLetter)
+        ? this.state.imageOpacity
+        : this.state.imageOpacity + 0.1,
+
       input: "",
     }));
   };
@@ -78,6 +84,7 @@ class App extends React.Component {
       currWord: getRandomWord(),
       guessedLetters: [],
       numOfGuessesLeft: 10,
+      imageOpacity: 0.1,
       input: "",
     });
   };
@@ -86,6 +93,8 @@ class App extends React.Component {
     // check if the user guessed the word
     const userGuessedTheWord = this.didUserGuessTheWord();
 
+    console.log(this.state.imageOpacity);
+
     // after guessing the correct word, reset the game and play again
     const playAgain = <button onClick={this.resetGame}>Play Again</button>;
 
@@ -93,15 +102,16 @@ class App extends React.Component {
       <div className="App">
         <header className="App-header">
           <h1>Guess The Word 🚀</h1>
-          <h3>Word Display</h3>
+
+          <h4>Word Display</h4>
+          <Image opacity={this.state.imageOpacity} />
           {this.generateWordDisplay()}
-          <h3>Guessed Letters</h3>
+          <h4>Guessed Letters</h4>
           {this.state.guessedLetters.length > 0
             ? this.state.guessedLetters.toString()
             : "_"}
-          <h3>Num of Guesses Left: {this.state.numOfGuessesLeft}</h3>
-
-          <h3>Input</h3>
+          <h4>Num of Guesses Left: {this.state.numOfGuessesLeft}</h4>
+          <h4>Input</h4>
           <form onSubmit={this.handleSubmit}>
             <input
               type="text"
